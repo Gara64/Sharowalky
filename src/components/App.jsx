@@ -32,7 +32,7 @@ class App extends React.Component {
         <Traces>
         </Traces>
         <div id="map-container">
-          <Map></Map>
+          <Map date={this.state.startDate}></Map>
         </div>
       </div>
     )

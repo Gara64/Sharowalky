@@ -5,16 +5,18 @@ import '../styles/app'
 import 'leaflet/dist/leaflet.css'
 
 class MapTraces extends React.Component {
-  constructor () {
-    super()
+  constructor (props) {
+    super(props)
     this.state = {
-      lat: 51.505,
-      lng: -0.09,
-      zoom: 13
+      lat: 48.86,
+      lng: 2.34,
+      zoom: 10
     }
+    // this.handleChange = this.handleChange.bind(this)
   }
 
   render () {
+    console.log('date : ' + this.props.date)
     const position = [this.state.lat, this.state.lng]
     return (
       <Map center={position} zoom={this.state.zoom}>
