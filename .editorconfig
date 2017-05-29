@@ -9,7 +9,7 @@ indent_style = space
 indent_size = 4
 
 [*.jsx]
-ident_size = 2
+indent_size = 2
 
 [*.{jade,pug}]
 trim_trailing_whitespace = false
