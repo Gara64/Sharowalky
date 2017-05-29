@@ -1,7 +1,6 @@
 import React from 'react'
 import { translate } from '../lib/I18n'
 import { Map, Marker, Popup, TileLayer } from 'react-leaflet'
-// import classNames from 'classnames'
 import '../styles/app'
 import 'leaflet/dist/leaflet.css'
 

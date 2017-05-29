@@ -5,14 +5,38 @@ import { translate } from '../lib/I18n'
 // import classNames from 'classnames'
 import Traces from './Traces.jsx'
 import Map from './Map.jsx'
+import DatePicker from 'react-datepicker'
+import moment from 'moment'
+import 'react-datepicker/dist/react-datepicker.css'
 
-const App = ({ t }) => (
-    // <h1 className={classNames(styles['title'])}>{ t('App.welcome') }</h1>
-    React.createElement('div', {},
-        React.createElement(Traces, {}),
-        React.createElement('div', {id: 'map-container'},
-          React.createElement(Map, {}))
+class App extends React.Component {
+  constructor (props) {
+    super(props)
+    this.state = {
+      startDate: moment()
+    }
+    this.handleChange = this.handleChange.bind(this)
+  }
+
+  handleChange (date) {
+    this.setState({
+      startDate: date
+    })
+  }
+
+  render () {
+    return (
+      <div>
+        <h1>Sharowalky 2000</h1>
+        <DatePicker selected={this.state.startDate} onChange={this.handleChange} />
+        <Traces>
+        </Traces>
+        <div id="map-container">
+          <Map></Map>
+        </div>
+      </div>
     )
-)
+  }
+}
 
 export default translate()(App)

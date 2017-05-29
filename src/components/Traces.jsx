@@ -1,6 +1,7 @@
 import React from 'react'
 import { translate } from '../lib/I18n'
 import Plotly from 'plotly.js'
+import '../styles/app'
 
 class Traces extends React.Component {
   componentDidMount () {
@@ -13,7 +14,6 @@ class Traces extends React.Component {
   render () {
     return (
       <div>
-        <h1>Sharowalky 2000</h1>
         <div id="plot">
         </div>
       </div>
