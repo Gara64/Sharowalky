@@ -5,6 +5,7 @@ import { translate } from '../lib/I18n'
 // import classNames from 'classnames'
 import Traces from './Traces.jsx'
 import Map from './Map.jsx'
+import Photos from './Photos.jsx'
 import DatePicker from 'react-datepicker'
 import moment from 'moment'
 import 'react-datepicker/dist/react-datepicker.css'
@@ -35,6 +36,7 @@ class App extends React.Component {
         <div id="map-container">
           <Map date={this.state.startDate}></Map>
         </div>
+        <Photos date={this.state.startDate}></Photos>
       </div>
     )
   }

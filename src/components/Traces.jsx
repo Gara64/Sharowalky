@@ -31,7 +31,7 @@ class Traces extends React.Component {
     return y
   }
 
-  componentWillUpdate () {
+  createPlot () {
     var x = this.createXAxis(this.props.date)
     var y = this.createYAxis(this.props.activity)
     Plotly.newPlot('plot', [{
@@ -41,11 +41,12 @@ class Traces extends React.Component {
     }])
   }
 
+  componentWillUpdate () {
+    this.createPlot()
+  }
+
   componentDidMount () {
-    Plotly.newPlot('plot', [{
-      x: this.props.activityX,
-      y: this.props.activityY }]
-    )
+    this.createPlot()
   }
 
   render () {
