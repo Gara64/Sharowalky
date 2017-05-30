@@ -12,8 +12,9 @@ import 'react-datepicker/dist/react-datepicker.css'
 class App extends React.Component {
   constructor (props) {
     super(props)
+    var startDate = moment()
     this.state = {
-      startDate: moment()
+      startDate: startDate
     }
     this.handleChange = this.handleChange.bind(this)
   }
@@ -29,7 +30,7 @@ class App extends React.Component {
       <div>
         <h1>Sharowalky 2000</h1>
         <DatePicker selected={this.state.startDate} onChange={this.handleChange} />
-        <Traces>
+        <Traces date={this.state.startDate} activity={this.state.activityY}>
         </Traces>
         <div id="map-container">
           <Map date={this.state.startDate}></Map>
