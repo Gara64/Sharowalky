@@ -6321,6 +6321,10 @@ raven-js@^3.1.1:
   version "3.15.0"
   resolved "https://registry.yarnpkg.com/raven-js/-/raven-js-3.15.0.tgz#ebf95466b7d40fbbc3d6a5085af7c1431607926c"
 
+rc-css-transition-group@^2.1.4:
+  version "2.1.4"
+  resolved "https://registry.yarnpkg.com/rc-css-transition-group/-/rc-css-transition-group-2.1.4.tgz#3bb6cbf33033b9b452065a98fb24efe18405fc82"
+
 rc@^1.1.7:
   version "1.2.1"
   resolved "https://registry.yarnpkg.com/rc/-/rc-1.2.1.tgz#2e03e8e42ee450b8cb3dce65be1bf8974e1dfd95"
