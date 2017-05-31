@@ -52,6 +52,7 @@ class Traces extends React.Component {
   render () {
     return (
       <div>
+        <h3>Steps for this day</h3>
         <div id="plot">
         </div>
       </div>

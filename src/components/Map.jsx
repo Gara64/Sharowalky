@@ -19,17 +19,20 @@ class MapTraces extends React.Component {
     console.log('date : ' + this.props.date)
     const position = [this.state.lat, this.state.lng]
     return (
-      <Map center={position} zoom={this.state.zoom}>
-        <TileLayer
-          attribution="&amp;copy <a href=&quot;http://osm.org/copyright&quot;>OpenStreetMap</a> contributors"
-          url="http://{s}.tile.osm.org/{z}/{x}/{y}.png"
-        />
-        <Marker position={position}>
-          <Popup>
-            <span>A pretty CSS3 popup. <br /> Easily customizable.</span>
-          </Popup>
-        </Marker>
-      </Map>
+      <div>
+          <h3>Locations for this day</h3>
+          <Map center={position} zoom={this.state.zoom}>
+            <TileLayer
+              attribution="&amp;copy <a href=&quot;http://osm.org/copyright&quot;>OpenStreetMap</a> contributors"
+              url="http://{s}.tile.osm.org/{z}/{x}/{y}.png"
+            />
+            <Marker position={position}>
+              <Popup>
+                <span>A pretty CSS3 popup. <br /> Easily customizable.</span>
+              </Popup>
+            </Marker>
+          </Map>
+      </div>
     )
   }
 }

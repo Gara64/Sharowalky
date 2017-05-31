@@ -1,13 +1,12 @@
 import React from 'react'
 import Gallery from 'react-photo-gallery'
-import Measure from 'react-measure'
 import Lightbox from 'react-images'
 import { translate } from '../lib/I18n'
 
 class PhotoGallery extends React.Component {
-  constructor () {
-    super()
-    this.state = {photos: null, pageNum: 1, totalPages: 1, loadedAll: false, currentImage: 0}
+  constructor (props) {
+    super(props)
+    this.state = {pageNum: 1, totalPages: 1, loadedAll: false, currentImage: 0}
     this.handleScroll = this.handleScroll.bind(this)
     this.loadMorePhotos = this.loadMorePhotos.bind(this)
     this.closeLightbox = this.closeLightbox.bind(this)
@@ -29,30 +28,6 @@ class PhotoGallery extends React.Component {
   }
 
   getPhotos () {
-    const PHOTO_SET = [
-      {
-        src: 'http://cozy.tools:8080/files/downloads/cb08b150399ecbcc/28361923354_83ba9ec49e_o.jpg',
-        sizes: [
-          '(min-width: 480px) 50vw',
-          '(min-width: 1024px) 33.3vw',
-          '100vw'
-        ],
-        width: 300,
-        height: 500,
-        alt: 'image 1'
-      },
-      {
-        src: 'http://cozy.tools:8080/files/downloads/0928e336167e04ea/28361849264_5371ff977b_o.jpg',
-        sizes: [
-          '(min-width: 480px) 50vw',
-          '(min-width: 1024px) 33.3vw',
-          '100vw'
-        ],
-        width: 300,
-        height: 500,
-        alt: 'image 2'
-      }
-    ]
     this.setState({
       photos: PHOTO_SET
     })
@@ -98,54 +73,64 @@ class PhotoGallery extends React.Component {
     })
   }
 
-  renderGallery () {
-    return (
-      <Measure whitelist={['width']}>
-        {
-          ({ width }) => {
-            var cols = 1
-            if (width >= 480) {
-              cols = 2
-            }
-            if (width >= 1024) {
-              cols = 3
-            }
-            return <Gallery photos={this.state.photos} cols={cols} onClickPhoto={this.openLightbox} />
-          }
-        }
-      </Measure>
-    )
-  }
-
   render () {
-    // no loading sign if its all loaded
-    if (this.state.photos) {
-      return (
-        <div className="App">
-          {this.renderGallery()}
-          <Lightbox
-            theme={{container: { background: 'rgba(0, 0, 0, 0.85)' }}}
-            images={this.state.photos}
-            backdropClosesModal={true}
-            onClose={this.closeLightbox}
-            onClickPrev={this.gotoPrevious}
-            onClickNext={this.gotoNext}
-            currentImage={this.state.currentImage}
-            isOpen={this.state.lightboxIsOpen}
-            width={1600}
-          />
-          {!this.state.loadedAll && <div className="loading-msg" id="msg-loading-more">Loading</div>}
-        </div>
-      )
+    var photos = []
+    let p = this.props.photos
+    console.log('photos props: ', JSON.stringify(this.props.photos))
+
+    for (let i = 0; i < p.length; i++) {
+      let photo = {
+        src: p[i].src,
+        width: 681,
+        height: 1024,
+        alt: p[i].name
+      }
+      photos.push(photo)
     }
-    else {
-      return (
-        <div id='app' className="App">
-          <div id="msg-app-loading" className="loading-msg">Loading</div>
-        </div>
-      )
-    }
+    console.log('photos gallery: ', JSON.stringify(photos))
+
+    return (
+      <div>
+        <h3>Photos taken this day</h3>
+         <Gallery photos={photos} onClickPhoto={this.openLightbox} />
+         <Lightbox
+           theme={{container: { background: 'rgba(0, 0, 0, 0.85)' }}}
+           images={photos}
+           backdropClosesModal={true}
+           onClose={this.closeLightbox}
+           onClickPrev={this.gotoPrevious}
+           onClickNext={this.gotoNext}
+           currentImage={this.state.currentImage}
+           isOpen={this.state.lightboxIsOpen}
+           width={1600}
+         />
+       </div>
+    )
   }
 }
 export default translate()(PhotoGallery)
-// ReactDOM.render(<App />, document.getElementById('app'))
+
+const PHOTO_SET = [
+  {
+    src: 'http://cozy.tools:8080/files/downloads/5e7055a781aa2f62/P1000417.JPG',
+    sizes: [
+      '(min-width: 480px) 50vw',
+      '(min-width: 1024px) 33.3vw',
+      '100vw'
+    ],
+    width: 681,
+    height: 1024,
+    alt: 'image 1'
+  },
+  {
+    src: 'http://cozy.tools:8080/files/downloads/d00e8979b6ea042e/P1010009.JPG',
+    sizes: [
+      '(min-width: 480px) 50vw',
+      '(min-width: 1024px) 33.3vw',
+      '100vw'
+    ],
+    width: 600,
+    height: 600,
+    alt: 'image 2'
+  }
+]

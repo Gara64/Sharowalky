@@ -1,3 +1,5 @@
+/* global cozy */
+
 // import styles from '../styles/app'
 // import classNames from 'classnames'
 
@@ -5,7 +7,6 @@ import React from 'react'
 import { translate } from '../lib/I18n'
 import Traces from './Traces.jsx'
 import Map from './Map.jsx'
-import Photos from './Photos.jsx'
 import PhotoGallery from './Gallery.jsx'
 import DatePicker from 'react-datepicker'
 import moment from 'moment'
@@ -32,21 +33,32 @@ class App extends React.Component {
     })
   }
 
-  async getPhotos () {
-    /* let res = cozy.client.data.find('io.cozy.files', '9a15a2ebaf20cdc74d94150b6400adc6')
-    res.then(function (res) {
-      console.log('res : ', res)
-    }) */
+  getPhotos () {
+    let photos = []
+    let _this = this
+    indexFilesByDate().then(function (index) {
+      fetchPhotos(index).then(function (docs) {
+        for (let doc of docs) {
+          getDownloadLink(doc).then(function (link) {
+            let photo = {
+              src: link,
+              id: doc._id,
+              name: doc.name
+            }
+            photos.push(photo)
+            _this.setState({
+              photos: photos
+            })
+          })
+        }
 
-    const res = await cozy.client.data.find('io.cozy.files', '9a15a2ebaf20cdc74d94150b6400adc6')
-    console.log('res : ', res)
-
-    // const response = await cozy.client.files.downloadById('9a15a2ebaf20cdc74d94150b6400adc6')
-    // response.pipe(fs.createWriteStream('test.jpg'))
-
+        console.log('photos : ', this.state.photos)
+      })
+    })
   }
 
   render () {
+    //    <Photos date={this.state.startDate} photos={this.state.photos}></Photos>
     return (
       <div>
         <h1>Sharowalky 2000</h1>
@@ -56,11 +68,38 @@ class App extends React.Component {
         <div id="map-container">
           <Map date={this.state.startDate}></Map>
         </div>
-        <Photos date={this.state.startDate} photos={this.state.photos}></Photos>
-        <PhotoGallery id="photo-gallery"></PhotoGallery>
+        <PhotoGallery id="photo-gallery" photos={this.state.photos}></PhotoGallery>
       </div>
     )
   }
 }
 
 export default translate()(App)
+
+const indexFilesByDate = async () => {
+  const fields = [ 'class', 'trashed' ]
+  return await cozy.client.data.defineIndex('io.cozy.files', fields)
+}
+
+const fetchPhotos = async (index) => {
+  const options = {
+    selector: {
+      class: 'image',
+      trashed: false
+    },
+    fields: ['_id', 'dir_id', 'name', 'size', 'updated_at', 'metadata'],
+    descending: true,
+    wholeResponse: true
+  }
+  console.log('index fetch : ', JSON.stringify(index))
+
+  return await cozy.client.data.query(index, options)
+}
+
+const getDownloadLink = async (doc) => {
+  let link = await cozy.client.files.getDownloadLinkById(doc._id)
+  // TODO: change by cozy url
+  link = 'http://cozy.tools:8080' + link
+  console.log('download link: ', link)
+  return link
+}
