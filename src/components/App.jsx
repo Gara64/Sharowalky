@@ -1,6 +1,6 @@
 /* global cozy */
 
-// import styles from '../styles/app'
+import '../styles/app'
 // import classNames from 'classnames'
 
 import React from 'react'
@@ -72,8 +72,10 @@ class App extends React.Component {
   render () {
     //    <Photos date={this.state.startDate} photos={this.state.photos}></Photos>
     return (
-      <div>
+      <div className='container'>
         <h1>Sharowalky 2000</h1>
+        <Sync></Sync>
+        <h3> Select the date</h3>
         <DatePicker selected={this.state.startDate} onChange={this.handleChange} />
         <div className='row' className='traces'>
           <div className='col-md-6'>
