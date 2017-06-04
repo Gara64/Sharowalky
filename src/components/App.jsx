@@ -6,6 +6,8 @@
 import React from 'react'
 import { translate } from '../lib/I18n'
 import Traces from './Traces.jsx'
+import Sync from './Sync.jsx'
+import Details from './Details.jsx'
 import Map from './Map.jsx'
 import PhotoGallery from './Gallery.jsx'
 import DatePicker from 'react-datepicker'
