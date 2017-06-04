@@ -22,7 +22,8 @@ class App extends React.Component {
     var startDate = moment()
     this.state = {
       startDate: startDate,
-      photos: []
+      photos: [],
+      photosReco: []
     }
     this.handleChange = this.handleChange.bind(this)
   }
@@ -35,6 +36,7 @@ class App extends React.Component {
 
   getPhotos () {
     let photos = []
+    let photosReco = []
     let _this = this
     indexFilesByDate().then(function (index) {
       fetchPhotos(index).then(function (docs) {
@@ -45,10 +47,18 @@ class App extends React.Component {
               id: doc._id,
               name: doc.name
             }
-            photos.push(photo)
-            _this.setState({
-              photos: photos
-            })
+            // Add the photos with recognized faces in separate state
+            if (photo.name.indexOf('_reco') > -1) {
+              photosReco.push(photo)
+              _this.setState({
+                photosReco: photosReco
+              })
+            } else {
+              photos.push(photo)
+              _this.setState({
+                photos: photos
+              })
+            }
           })
         }
 
@@ -63,12 +73,21 @@ class App extends React.Component {
       <div>
         <h1>Sharowalky 2000</h1>
         <DatePicker selected={this.state.startDate} onChange={this.handleChange} />
-        <Traces date={this.state.startDate} activity={this.state.activityY}>
-        </Traces>
-        <div id="map-container">
-          <Map date={this.state.startDate}></Map>
+        <div className='row' className='traces'>
+          <div className='col-md-6'>
+            <Traces date={this.state.startDate} activity={this.state.activityY}>
+            </Traces>
+          </div>
+          <div className='col-md-6' id="map-container">
+            <Map date={this.state.startDate}></Map>
+          </div>
         </div>
-        <PhotoGallery id="photo-gallery" photos={this.state.photos}></PhotoGallery>
+        <div>
+          <PhotoGallery id="photo-gallery" photos={this.state.photos} photosReco={this.state.photosReco}></PhotoGallery>
+        </div>
+        <div>
+          <Details></Details>
+        </div>
       </div>
     )
   }

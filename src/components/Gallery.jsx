@@ -13,24 +13,18 @@ class PhotoGallery extends React.Component {
     this.openLightbox = this.openLightbox.bind(this)
     this.gotoNext = this.gotoNext.bind(this)
     this.gotoPrevious = this.gotoPrevious.bind(this)
-
-    this.getPhotos()
   }
+
   componentDidMount () {
     this.loadMorePhotos()
     window.addEventListener('scroll', this.handleScroll)
   }
+
   handleScroll () {
     let scrollY = window.scrollY || window.pageYOffset || document.documentElement.scrollTop
     if ((window.innerHeight + scrollY) >= (document.body.offsetHeight - 50)) {
       this.loadMorePhotos()
     }
-  }
-
-  getPhotos () {
-    this.setState({
-      photos: PHOTO_SET
-    })
   }
 
   loadMorePhotos (e) {
@@ -65,9 +59,6 @@ class PhotoGallery extends React.Component {
   }
 
   gotoNext () {
-    if (this.state.photos.length - 2 === this.state.currentImage) {
-      this.loadMorePhotos()
-    }
     this.setState({
       currentImage: this.state.currentImage + 1
     })
@@ -75,17 +66,30 @@ class PhotoGallery extends React.Component {
 
   render () {
     var photos = []
+    var photosReco = []
     let p = this.props.photos
+    let pReco = this.props.photosReco
     console.log('photos props: ', JSON.stringify(this.props.photos))
 
     for (let i = 0; i < p.length; i++) {
       let photo = {
         src: p[i].src,
-        width: 681,
-        height: 1024,
+
+        width: 400,
+        height: 400,
         alt: p[i].name
       }
       photos.push(photo)
+      for (let j = 0; j < pReco.length; j++) {
+        let name = pReco[j].name.replace('_reco', '')
+        if (name === p[i].name) {
+          console.log(name + ' has reco faces')
+          let photoReco = {
+            src: pReco[j].src
+          }
+          photosReco.push(photoReco)
+        }
+      }
     }
     console.log('photos gallery: ', JSON.stringify(photos))
 
@@ -95,7 +99,7 @@ class PhotoGallery extends React.Component {
          <Gallery photos={photos} onClickPhoto={this.openLightbox} />
          <Lightbox
            theme={{container: { background: 'rgba(0, 0, 0, 0.85)' }}}
-           images={photos}
+           images={photosReco}
            backdropClosesModal={true}
            onClose={this.closeLightbox}
            onClickPrev={this.gotoPrevious}
@@ -110,6 +114,7 @@ class PhotoGallery extends React.Component {
 }
 export default translate()(PhotoGallery)
 
+/*
 const PHOTO_SET = [
   {
     src: 'http://cozy.tools:8080/files/downloads/5e7055a781aa2f62/P1000417.JPG',
@@ -134,3 +139,4 @@ const PHOTO_SET = [
     alt: 'image 2'
   }
 ]
+*/
