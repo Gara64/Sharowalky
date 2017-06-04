@@ -47,11 +47,23 @@ module.exports = {
           'css-loader?importLoaders=1',
           'postcss-loader'
         ])
+      },
+      // the url-loader uses DataUrls.
+      // the file-loader emits files.
+      {
+        test: /\.woff2?(\?v=[0-9]\.[0-9]\.[0-9])?$/,
+        // Limiting the size of the woff fonts breaks font-awesome ONLY for the extract text plugin
+        // loader: "url?limit=10000"
+        loader: "url"
+      },
+      {
+        test: /\.(ttf|eot|svg)(\?[\s\S]+)?$/,
+        loader: 'file'
       }
     ],
     noParse: [
       /localforage\/dist/
-    ]
+  ]
   },
   postcss: () => {
     return [
