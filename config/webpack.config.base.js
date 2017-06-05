@@ -48,6 +48,8 @@ module.exports = {
           'postcss-loader'
         ])
       },
+      // mermaid
+      { test: /\.mmd$/, loader: "mermaid" },
       // the url-loader uses DataUrls.
       // the file-loader emits files.
       {
@@ -93,5 +95,8 @@ module.exports = {
         production ? require('csswring')({preservehacks: true, removeallcomments: true}) : []
       )
     })
-  ]
+  ],
+  node: {
+    fs: "empty"
+  }
 }

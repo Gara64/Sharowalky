@@ -5,6 +5,8 @@ import 'babel-polyfill'
 import './styles/main'
 import 'font-awesome/css/font-awesome.css'
 import 'bootstrap/dist/css/bootstrap.css'
+import 'mermaid/dist/mermaid.css'
+
 import React from 'react'
 import { render } from 'react-dom'
 
