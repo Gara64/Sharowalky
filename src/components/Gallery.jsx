@@ -65,8 +65,8 @@ class PhotoGallery extends React.Component {
   }
 
   render () {
+    var photosGallery = []
     var photos = []
-    var photosReco = []
     let p = this.props.photos
     let pReco = this.props.photosReco
     console.log('photos props: ', JSON.stringify(this.props.photos))
@@ -79,7 +79,8 @@ class PhotoGallery extends React.Component {
         height: 400,
         alt: p[i].name
       }
-      photos.push(photo)
+      photosGallery.push(photo)
+      let foundReco = false
       for (let j = 0; j < pReco.length; j++) {
         let name = pReco[j].name.replace('_reco', '')
         if (name === p[i].name) {
@@ -87,19 +88,25 @@ class PhotoGallery extends React.Component {
           let photoReco = {
             src: pReco[j].src
           }
-          photosReco.push(photoReco)
+          photos.push(photoReco)
+          foundReco = true
+          break
         }
       }
+      if (!foundReco) {
+        photos.push(photo)
+      }
     }
-    console.log('photos gallery: ', JSON.stringify(photos))
+    console.log('photos gallery: ', JSON.stringify(photosGallery))
+    console.log('photos: ', JSON.stringify(photos))
 
     return (
       <div>
         <h3>Photos taken this day</h3>
-         <Gallery photos={photos} onClickPhoto={this.openLightbox} />
+         <Gallery photos={photosGallery} onClickPhoto={this.openLightbox} />
          <Lightbox
            theme={{container: { background: 'rgba(0, 0, 0, 0.85)' }}}
-           images={photosReco}
+           images={photos}
            backdropClosesModal={true}
            onClose={this.closeLightbox}
            onClickPrev={this.gotoPrevious}

@@ -19,18 +19,35 @@ class App extends React.Component {
     super(props)
 
     // Get photos
-    // this.getPhotos()
+    this.getPhotos()
 
     var startDate = moment()
     this.state = {
       startDate: startDate,
       photos: [],
-      photosReco: []
+      photosReco: [],
+      showSteps: false,
+      showMap: false,
+      showAgenda: false
     }
-    this.handleChange = this.handleChange.bind(this)
+    this.handleDateChange = this.handleDateChange.bind(this)
+    this.handleShowChange = this.handleShowChange.bind(this)
   }
 
-  handleChange (date) {
+  handleDateChange (date) {
+    console.log('input : ', date)
+    this.setState({
+      startDate: date
+    })
+  }
+
+  handleShowChange (event) {
+    console.log('input : ', event)
+    const target = event.target
+    if (target.type === 'checkbox') {
+      const id = target.id
+      this.state[id] = target.checked
+    }
     this.setState({
       startDate: date
     })
@@ -76,7 +93,18 @@ class App extends React.Component {
         <h1>Sharowalky 2000</h1>
         <Sync></Sync>
         <h3> Select the date</h3>
-        <DatePicker selected={this.state.startDate} onChange={this.handleChange} />
+        <DatePicker selected={this.state.startDate} onChange={this.handleDateChange} />
+        <div className="row">
+          <div className="col-md-12">
+            <PhotoGallery id="photo-gallery" photos={this.state.photos} photosReco={this.state.photosReco}></PhotoGallery>
+          </div>
+        </div>
+        <div className="row">
+          <p>For this day:</p>
+          <input id="showSteps" type="checkbox" onInput={this.handleChange}>Show the steps</input>
+          <input id="showMap" type="checkbox" onInput={this.handleChange}>Show the tracks</input>
+          <input id="showAgenda" type="checkbox" onInput={this.handleChange}>Show the agenda</input>
+        </div>
         <div className='row' className='traces'>
           <div className='col-md-6'>
             <Traces date={this.state.startDate} activity={this.state.activityY}>
@@ -86,9 +114,7 @@ class App extends React.Component {
             <Map date={this.state.startDate}></Map>
           </div>
         </div>
-        <div>
-          <PhotoGallery id="photo-gallery" photos={this.state.photos} photosReco={this.state.photosReco}></PhotoGallery>
-        </div>
+
         <div>
           <Details></Details>
         </div>
