@@ -16,10 +16,8 @@ class Details extends React.Component {
       showFullTree: false
     }
     this.handleShowTreeChange = this.handleShowTreeChange.bind(this)
-  }
+    this.handleShowACLChange = this.handleShowACLChange.bind(this)
 
-  handleShowTreeChange () {
-    console.log('tree state changed')
   }
 
   componentDidMount () {
@@ -31,28 +29,42 @@ class Details extends React.Component {
     div.setAttribute("style", "visibility: visible;")
   }
 
+  handleShowACLChange (event) {
+    let div = document.getElementById('details')
+    div.innerHTML = ''
+    let ACLs = [
+      {filename: 'Petrus_phds.jpg', subject: 'Test', href:'http://cozy.tools:8080/files/downloads/adeb5c82ef3fccbf/petrus_phds.jpg'},
+      {filename: 'tracks.gpx', subject: 'Test', href:'http://cozy.tools:8080/files/downloads/adeb5c82ef3fccbf/petrus_phds.jpg'}
+    ]
+    ReactDOM.render(<ACL ACLs={ACLs}/>, div)
+
+
+  }
+
   render () {
     console.log('Test page! mermaid version ' + mermaid.version())
 
     return (
       <div>
         <div className='row'>
-          <div className='col-md-2 col-md-offset-2'>
-            <h3>ACL production</h3>
-            <i className='fa fa-cog fa-spin fa-3x fa-fw'></i>
-            <span className='sr-only'>Loading...</span>
+          <div className='col-md-3'>
+            <h3>ACL production
+            <i className='fa fa-cog fa-spin fa-3x fa-fw'>
+            <span className='sr-only'>Loading...</span></i>
+            </h3>
           </div>
         </div>
           <div className='row'>
             <div className='col-md-3'>
-              <h4>Operators </h4>
+              <h4>Rule Operators </h4>
               <div className='mermaid'>
                 graph BT;
                   D(What: Photos)-->ACL;
                   S(Who: Contacts)-->ACL;
                   click ACL ACLCallback "Show ACL";
               </div>
-              <button type="button" class="btn btn-info" onClick={this.handleShowTreeChange}>Show details</button>
+              <button type="button" class="btn btn-info" onClick={this.handleShowTreeChange}>Show rule details</button>
+              <button type="button" class="btn btn-info" onClick={this.handleShowACLChange}>Show all ACLs</button>
 
             </div>
             <div className='col-md-9'>
@@ -60,6 +72,8 @@ class Details extends React.Component {
               <div id='details'></div>
               <div id='tree' style='visibility: hidden;'>
                 <OpTree />
+              </div>
+              <div id='all_acls' style='visibility: hidden;'>
               </div>
             </div>
           </div>
@@ -114,8 +128,38 @@ class OpTree extends React.Component {
   }
 }
 
-class ACL extends React.Component {
+class TableRowEl extends React.Component {
+  constructor (props) {
+    super(props)
+  }
   render () {
+    return (
+      <tr>
+        <td>
+          <a href={this.props.href}>{this.props.filename}</a>
+        </td>
+        <td>
+          {this.props.subject}
+        </td>
+        <td>
+          TODO: remove
+        </td>
+      </tr>
+    )
+  }
+}
+
+class ACL extends React.Component {
+  constructor (props) {
+    super(props)
+  }
+
+  render () {
+    console.log('acls : ', JSON.stringify(this.props.ACLs))
+    let rows = []
+    for (var i=0; i<this.props.ACLs.length; i++) {
+        rows.push(<TableRowEl subject={this.props.ACLs[i].subject} filename={this.props.ACLs[i].filename} href={this.props.ACLs[i].href} />)
+    }
 
     return (
       <div>
@@ -124,17 +168,11 @@ class ACL extends React.Component {
             <tr>
               <th>Docs</th>
               <th>Subjects</th>
+              <th>Action</th>
             </tr>
           </thead>
           <tbody>
-            <tr>
-              <td>
-                <a href='http://cozy.tools:8080/files/downloads/adeb5c82ef3fccbf/petrus_phds.jpg'>Petrus_phds.jpg</a>
-              </td>
-              <td>
-                Riad
-              </td>
-            </tr>
+            {rows}
           </tbody>
         </table>
       </div>
@@ -169,7 +207,10 @@ window.ACLCallback = function(id) {
   console.log('id: ' + id)
   let div = document.getElementById('details')
   div.innerHTML = '' // reset to avoid buggy HighLight render
-  ReactDOM.render(<ACL />, div)
+  let ACLs = [
+    {filename: 'Petrus_phds.jpg', subject: 'Test', href:'http://cozy.tools:8080/files/downloads/adeb5c82ef3fccbf/petrus_phds.jpg'}
+  ]
+  ReactDOM.render(<ACL ACLs={ACLs}/>, div)
 
 
 }

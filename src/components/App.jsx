@@ -20,7 +20,7 @@ class App extends React.Component {
     super(props)
 
     // Get photos
-    // this.getPhotos()
+     this.getPhotos()
 
     var startDate = moment()
     this.state = {
