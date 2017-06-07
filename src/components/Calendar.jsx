@@ -1,11 +1,7 @@
 import React from 'react'
 import { translate } from '../lib/I18n'
 import '../styles/app'
-import Iframe from 'react-iframe'
 
-import Dayz from 'react-day-picker'
-import moment from 'moment'
-import 'moment-range'
 
 class Calendar extends React.Component {
   constructor (props) {
