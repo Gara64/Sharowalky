@@ -115,6 +115,7 @@ class PhotoGallery extends React.Component {
            isOpen={this.state.lightboxIsOpen}
            width={1600}
          />
+     <button type="button" class="btn btn-success">Share my group photos</button>
        </div>
     )
   }
