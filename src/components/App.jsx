@@ -20,7 +20,7 @@ class App extends React.Component {
     super(props)
 
     // Get photos
-    this.getPhotos()
+    // this.getPhotos()
 
     var startDate = moment()
     this.state = {
@@ -110,16 +110,26 @@ class App extends React.Component {
           </div>
         </div>
         <div className="row">
-          <p>For this day:</p>
-          <label> Show the steps
-            <input id="showSteps" type="checkbox" onInput={this.handleShowChange} />
-          </label>
-          <label> Show the map
-            <input id="showMap" type="checkbox" onInput={this.handleShowChange} />
-          </label>
-          <label> Show the agenda
-            <input id="showAgenda" type="checkbox" onInput={this.handleShowChange} />
-          </label>
+          <b>For this day:</b>
+          <br />
+          <ul>
+            <li>
+            <label> Add my steps
+              <input id="showSteps" type="checkbox" onInput={this.handleShowChange} />
+            </label>
+            </li>
+            <li>
+            <label> Add my GPS tracks
+              <input id="showMap" type="checkbox" onInput={this.handleShowChange} />
+            </label>
+            </li>
+            <li>
+            <label> Add my agenda
+              <input id="showAgenda" type="checkbox" onInput={this.handleShowChange} />
+            </label>
+            </li>
+          </ul>
+
         </div>
         <div className='row' className='traces'>
           <div className='col-md-6'>
@@ -137,7 +147,10 @@ class App extends React.Component {
         </div>
         <div className='row'>
           <div className='col-md-12'>
-             <Calendar date={this.state.startDate} />
+            { this.state.showAgenda
+              ? <Calendar date={this.state.startDate} />
+            : null
+            }
           </div>
         </div>
         <div>
