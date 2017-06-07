@@ -10,6 +10,7 @@ import Sync from './Sync.jsx'
 import Details from './Details.jsx'
 import Map from './Map.jsx'
 import PhotoGallery from './Gallery.jsx'
+import Calendar from './Calendar.jsx'
 import DatePicker from 'react-datepicker'
 import moment from 'moment'
 import 'react-datepicker/dist/react-datepicker.css'
@@ -42,15 +43,24 @@ class App extends React.Component {
   }
 
   handleShowChange (event) {
-    console.log('input : ', event)
     const target = event.target
+    const id = target.id
     if (target.type === 'checkbox') {
-      const id = target.id
-      this.state[id] = target.checked
+      if (id === 'showSteps') {
+        this.setState({
+          showSteps: target.checked
+        })
+      } else if (id === 'showMap') {
+        this.setState({
+          showMap: target.checked
+        })
+      } else if (id === 'showAgenda') {
+        this.setState({
+          showAgenda: target.checked
+        })
+      }
+      console.log('state : ', this.state)
     }
-    this.setState({
-      startDate: date
-    })
   }
 
   getPhotos () {
@@ -101,20 +111,35 @@ class App extends React.Component {
         </div>
         <div className="row">
           <p>For this day:</p>
-          <input id="showSteps" type="checkbox" onInput={this.handleChange}>Show the steps</input>
-          <input id="showMap" type="checkbox" onInput={this.handleChange}>Show the tracks</input>
-          <input id="showAgenda" type="checkbox" onInput={this.handleChange}>Show the agenda</input>
+          <label> Show the steps
+            <input id="showSteps" type="checkbox" onInput={this.handleShowChange} />
+          </label>
+          <label> Show the map
+            <input id="showMap" type="checkbox" onInput={this.handleShowChange} />
+          </label>
+          <label> Show the agenda
+            <input id="showAgenda" type="checkbox" onInput={this.handleShowChange} />
+          </label>
         </div>
         <div className='row' className='traces'>
           <div className='col-md-6'>
-            <Traces date={this.state.startDate} activity={this.state.activityY}>
-            </Traces>
+            { this.state.showSteps
+            ? <Traces date={this.state.startDate} activity={this.state.activityY} />
+            : null
+            }
           </div>
           <div className='col-md-6' id="map-container">
-            <Map date={this.state.startDate}></Map>
+            { this.state.showMap
+            ? <Map date={this.state.startDate} />
+            : null
+            }
           </div>
         </div>
-
+        <div className='row'>
+          <div className='col-md-12'>
+             <Calendar date={this.state.startDate} />
+          </div>
+        </div>
         <div>
           <Details></Details>
         </div>
