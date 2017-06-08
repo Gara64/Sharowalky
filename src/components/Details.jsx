@@ -227,6 +227,7 @@ class TableRowEl extends React.Component {
   }
 
   render () {
+    let subjectName = this.props.subjectname.replace('_face.jpg', '')
     let trId = this.props.index + '_tr'
     return (
       <tr id={trId}>
@@ -239,6 +240,7 @@ class TableRowEl extends React.Component {
             height="50"
             width="50"
           />
+        <label> </label>  {subjectName}
         </td>
         <td>
           <button
