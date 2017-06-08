@@ -14,7 +14,8 @@ class PhotoGallery extends React.Component {
       pageNum: 1,
       totalPages: 1,
       loadedAll: false,
-      currentImage: 0
+      currentImage: 0,
+      showSpinner: false
     }
     this.handleScroll = this.handleScroll.bind(this)
     this.loadMorePhotos = this.loadMorePhotos.bind(this)
@@ -22,7 +23,21 @@ class PhotoGallery extends React.Component {
     this.openLightbox = this.openLightbox.bind(this)
     this.gotoNext = this.gotoNext.bind(this)
     this.gotoPrevious = this.gotoPrevious.bind(this)
+    this.handleShareClick = this.handleShareClick.bind(this)
+    this.stopSpinner = this.stopSpinner.bind(this)
+  }
 
+  stopSpinner () {
+    this.setState({
+      showSpinner: false
+    })
+  }
+
+  handleShareClick () {
+    this.setState({
+      showSpinner: true
+    })
+    setTimeout(this.stopSpinner, 3000)
   }
 
   componentDidMount () {
@@ -49,8 +64,8 @@ class PhotoGallery extends React.Component {
 
   openLightbox (index, event) {
     event.preventDefault()
-    if (photosGallery[index].alt.indexOf('petrus_youngs') > -1 ) {
-      if (cptTrick % 2 != 0) {
+    if (photosGallery[index].alt.indexOf('petrus_youngs') > -1) {
+      if (cptTrick % 2 !== 0) {
         index = photosGallery.length
       }
       cptTrick++
@@ -103,9 +118,7 @@ class PhotoGallery extends React.Component {
       photosGallery.push(photo)
       let foundReco = false
       for (let j = 0; j < pReco.length; j++) {
-      //  console.log('photo name : ', pReco[j].name)
-        //console.log('cpt trick : ' + this.cptTrick)
-        if (pReco[j].name.indexOf('_reco2') > -1)  {
+        if (pReco[j].name.indexOf('_reco2') > -1) {
           photoRecoTmp = {
             src: pReco[j].src
           }
@@ -127,53 +140,41 @@ class PhotoGallery extends React.Component {
       }
     }
 
-
     return (
       <div>
         <h3>Photos taken this day</h3>
-         <Gallery photos={photosGallery} onClickPhoto={this.openLightbox} />
-         <Lightbox
-           theme={{container: { background: 'rgba(0, 0, 0, 0.85)' }}}
-           images={photos}
-           backdropClosesModal={true}
-           onClose={this.closeLightbox}
-           onClickPrev={this.gotoPrevious}
-           onClickNext={this.gotoNext}
-           currentImage={this.state.currentImage}
-           isOpen={this.state.lightboxIsOpen}
-           width={1600}
-         />
-       <a class="btn btn-lg btn-success" href="#">
+        <Gallery photos={photosGallery} onClickPhoto={this.openLightbox} />
+        <Lightbox
+          theme={{container: { background: 'rgba(0, 0, 0, 0.85)' }}}
+          images={photos}
+          backdropClosesModal={true}
+          onClose={this.closeLightbox}
+          onClickPrev={this.gotoPrevious}
+          onClickNext={this.gotoNext}
+          currentImage={this.state.currentImage}
+          isOpen={this.state.lightboxIsOpen}
+          width={1600}
+        />
+      <a class="btn btn-lg btn-success" href="#" onClick={this.handleShareClick}>
          <i class="fa fa-share-alt fa-2x pull-left"></i> Share my group photos</a>
+        {this.state.showSpinner
+        ? <Spinner />
+        : null
+        }
        </div>
     )
   }
 }
 export default translate()(PhotoGallery)
 
-/*
-const PHOTO_SET = [
-  {
-    src: 'http://cozy.tools:8080/files/downloads/5e7055a781aa2f62/P1000417.JPG',
-    sizes: [
-      '(min-width: 480px) 50vw',
-      '(min-width: 1024px) 33.3vw',
-      '100vw'
-    ],
-    width: 681,
-    height: 1024,
-    alt: 'image 1'
-  },
-  {
-    src: 'http://cozy.tools:8080/files/downloads/d00e8979b6ea042e/P1010009.JPG',
-    sizes: [
-      '(min-width: 480px) 50vw',
-      '(min-width: 1024px) 33.3vw',
-      '100vw'
-    ],
-    width: 600,
-    height: 600,
-    alt: 'image 2'
+class Spinner extends React.Component {
+
+  render () {
+    return (
+      <div id='spinner'>
+        <i class="fa fa-spinner fa-spin fa-3x fa-fw"></i>
+        <span class="sr-only">Loading data...</span>
+      </div>
+    )
   }
-]
-*/
+}

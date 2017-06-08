@@ -8,7 +8,7 @@ class Traces extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
-      interval: 6
+      interval: 4
     }
   }
 
@@ -26,7 +26,15 @@ class Traces extends React.Component {
   createYAxis (activity) {
     var y = []
     for (var i = 0; i < 24 / this.state.interval; i++) {
-      y.push(Math.floor(Math.random() * 10000))
+      if (i === 0) {
+        y.push(0)
+      } else if (i === 24 / this.state.interval - 1) {
+        y.push(42)
+      } else if (i === 1) {
+        y.push(Math.floor(Math.random() * 500))
+      } else {
+        y.push(Math.floor(Math.random() * 9000))
+      }
     }
     return y
   }

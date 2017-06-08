@@ -22,7 +22,7 @@ class Sync extends React.Component {
     this.setState({
       showSpinner: true
     })
-    setTimeout(this.stopSpinner, 5000)
+    setTimeout(this.stopSpinner, 10000)
   }
 
   render () {

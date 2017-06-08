@@ -1,6 +1,6 @@
 import React from 'react'
 import { translate } from '../lib/I18n'
-import { Map, Marker, Popup, TileLayer, Polyline } from 'react-leaflet'
+import { Map, TileLayer, Polyline } from 'react-leaflet'
 import '../styles/app'
 import 'leaflet/dist/leaflet.css'
 
@@ -14,7 +14,6 @@ class MapTraces extends React.Component {
     }
     // this.handleChange = this.handleChange.bind(this)
   }
-
   render () {
     console.log('date : ' + this.props.date)
     const position = [this.state.lat, this.state.lng]
@@ -26,11 +25,7 @@ class MapTraces extends React.Component {
               attribution="&amp;copy <a href=&quot;http://osm.org/copyright&quot;>OpenStreetMap</a> contributors"
               url="http://{s}.tile.osm.org/{z}/{x}/{y}.png"
             />
-            <Marker position={position}>
-              <Popup>
-                <span>A pretty CSS3 popup. <br /> Easily customizable.</span>
-              </Popup>
-            </Marker>
+
           <Polyline positions={GPS} color={'red'}>
           </Polyline>
           </Map>

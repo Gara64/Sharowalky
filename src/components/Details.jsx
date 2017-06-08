@@ -97,6 +97,15 @@ class Details extends React.Component {
     this.render()
   }
 
+  /*
+  <h4>Rule Operators </h4>
+  <Graph name='diagram'>
+    graph BT;
+      D(What: Photos)-->ACL;
+      S(Who: Contacts)-->ACL;
+      click ACL ACLCallback "Show ACL";
+  </Graph>
+  */
   render () {
     return (
       <div>
@@ -110,20 +119,16 @@ class Details extends React.Component {
         </div>
           <div className='row'>
             <div className='col-md-3'>
-              <h4>Rule Operators </h4>
-              <Graph name='diagram'>
-                graph BT;
-                  D(What: Photos)-->ACL;
-                  S(Who: Contacts)-->ACL;
-                  click ACL ACLCallback "Show ACL";
-              </Graph>
-
-              <button type="button" class="btn btn-info" onClick={this.handleShowTreeChange}>Show rule details</button>
-              <button type="button" class="btn btn-info" onClick={this.handleShowACLChange}>Show all ACLs</button>
-
+              <div>
+                <a class="btn btn-info" href="#" onClick={this.handleShowACLChange}>
+                  <i class="fa fa-eye fa-lg"></i> Show all ACLs</a>
+              </div>
+              <div>
+                <a class="btn btn-info" href="#" onClick={this.handleShowTreeChange}>
+                  <i class="fa fa-eye fa-lg"></i> Show rule details</a>
+              </div>
             </div>
             <div className='col-md-9'>
-              <h4>ACLs</h4>
               <div id='details'></div>
               <div id='tree' style='visibility: hidden;'>
                 <OpTree />
@@ -204,6 +209,7 @@ class OpTree extends React.Component {
           click IS graphCallback "Subject selection";
           click SI graphCallback "Subject extraction";
           click MS graphCallback "Subject matching";
+          click ACL graphCallback "Authorizations";
           style IS fill:#ccf,stroke:#f66,stroke-width:2px,stroke-dasharray: 5, 5;
           style SI fill:#ccf,stroke:#f66,stroke-width:2px,stroke-dasharray: 5, 5;
           style MS fill:#ccf,stroke:#f66,stroke-width:2px,stroke-dasharray: 5, 5;
@@ -275,6 +281,7 @@ class ACL extends React.Component {
 
     return (
       <div>
+        <h4>ACLs</h4>
         <table class="table">
           <thead>
             <tr>
@@ -318,13 +325,8 @@ window.graphCallback = function (id) {
   } else if (id === 'F2') {
     let code = '{\n' +
       '\t"$and": [{\n' +
-      '\t\t"$or": [\n' +
-      '\t\t\t{"$and": [{"docType": "io.cozy.files"}, {"class": "image"}]},\n' +
-      '\t\t\t{"docType": "io.cozy.steps"},\n' +
-      '\t\t\t{"docType": "io.cozy.gps"}\n' +
-      '\t\t]\n' +
-      '\t},\n' +
-      '\t\t{"date": "?"}\n' +
+      '\t\t{"$and": [{"docType": "io.cozy.files"}, {"class": "image"}]},\n' +
+      '\t\t{"date": "$date"}\n' +
       '\t]\n' +
       '}'
 
@@ -332,7 +334,7 @@ window.graphCallback = function (id) {
     ReactDOM.render(<Code code={code} title={title}/>, div)
   } else if (id === 'PC1' || id === 'PC2') {
     let title = 'Number of documents in the database:'
-    let code = 123
+    let code = 89
     ReactDOM.render(<Code code={code} title={title}/>, div)
   } else if (id === 'DI1') {
 
@@ -348,7 +350,14 @@ window.graphCallback = function (id) {
     ReactDOM.render(<Code code={code} title={title}/>, div)
   } else if (id === 'MS') {
     let title = 'Number of matching subjects:'
-    let code = 1
+    let code = 3
     ReactDOM.render(<Code code={code} title={title}/>, div)
+  } else if (id =='ACL') {
+    let title = 'Rule semantic'
+    let code = 'ACL <- {(s,d,a) ∈ SxDxA / Filter1 (d,Q) ∧ MatchS(DI(d), SI(s)) }'
+    code += '\n\nQ: docType = ".jpg" && date = ?\n'
+    code += 'DI: face recognition function from .jpg files\n'
+    ReactDOM.render(<Code code={code} title={title}/>, div)
+
   }
 }
