@@ -20,7 +20,7 @@ class App extends React.Component {
     super(props)
 
     // Get photos
-     this.getPhotos()
+    this.getPhotos()
 
     var startDate = moment()
     this.state = {
@@ -66,6 +66,7 @@ class App extends React.Component {
   getPhotos () {
     let photos = []
     let photosReco = []
+    let photosFace = []
     let _this = this
     indexFilesByDate().then(function (index) {
       fetchPhotos(index).then(function (docs) {
@@ -81,6 +82,11 @@ class App extends React.Component {
               photosReco.push(photo)
               _this.setState({
                 photosReco: photosReco
+              })
+            } else if (photo.name.indexOf('_face') > -1) {
+              photosFace.push(photo)
+              _this.setState({
+                photosFace: photosFace
               })
             } else {
               photos.push(photo)
@@ -154,7 +160,7 @@ class App extends React.Component {
           </div>
         </div>
         <div>
-          <Details></Details>
+          <Details photos={this.state.photos} photosFace={this.state.photosFace}></Details>
         </div>
       </div>
     )
