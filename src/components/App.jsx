@@ -160,7 +160,7 @@ class App extends React.Component {
           </div>
         </div>
         <div>
-          <Details photos={this.state.photos} photosFace={this.state.photosFace}></Details>
+          <Details date={this.state.startDate} photos={this.state.photos} photosFace={this.state.photosFace}></Details>
         </div>
       </div>
     )

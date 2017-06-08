@@ -48,6 +48,16 @@ class Details extends React.Component {
           ACLs.push(acl)
         }
       }
+      // Add tracks for each subject
+      for (let i = 0; i < this.props.photosFace.length; i++) {
+        let acl = {
+          filename: 'tracks_' + this.props.date + '.gpx',
+          filehref: '',
+          subjectname: this.props.photosFace[i].name,
+          subjecthref: this.props.photosFace[i].src
+        }
+        ACLs.push(acl)
+      }
       ReactDOM.render(<ACL ACLs={ACLs}/>, div)
     } else {
       this.state.showAllACLs = false
@@ -97,14 +107,6 @@ class Details extends React.Component {
 }
 
 class Graph extends React.Component {
-        /*
-<div id='simple-graph' className='mermaid'>
-  graph BT;
-    D(What: Photos)-->ACL;
-    S(Who: Contacts)-->ACL;
-    click ACL ACLCallback "Show ACL";
-</div>
-        */
   getDefaultProps () {
     return {
       name: 'mermaid'
