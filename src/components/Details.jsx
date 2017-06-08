@@ -123,7 +123,7 @@ class Details extends React.Component {
 
             </div>
             <div className='col-md-9'>
-              <h4>Details</h4>
+              <h4>ACLs</h4>
               <div id='details'></div>
               <div id='tree' style='visibility: hidden;'>
                 <OpTree />

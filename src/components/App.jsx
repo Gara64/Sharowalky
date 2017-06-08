@@ -121,9 +121,13 @@ class App extends React.Component {
     return (
       <div className='container'>
         <h1>Sharowalky 2000</h1>
-        <Sync></Sync>
-        <h3> Select the date</h3>
-        <DatePicker selected={this.state.startDate} onChange={this.handleDateChange} />
+        <div className='row'>
+          <Sync />
+        </div>
+        <div className='row'>
+          <h3> Select the date</h3>
+          <DatePicker selected={this.state.startDate} onChange={this.handleDateChange} />
+        </div>
         <div className="row">
           <div className="col-md-12">
             {day === 6 && month === 6
@@ -144,26 +148,27 @@ class App extends React.Component {
           </div>
         </div>
         <div className="row">
-          <b>For this day:</b>
+          <div class="form-group">
+          <label>For this day:</label>
           <br />
-          <ul>
+          <ul class='fa-ul'>
             <li>
-            <label> Add my steps
+              <i class="fa-li fa fa-bar-chart fa-2x"></i>
+              Add my steps <label> </label>
               <input id="showSteps" type="checkbox" onInput={this.handleShowChange} />
-            </label>
             </li>
             <li>
-            <label> Add my GPS tracks
+              <i class="fa-li fa fa-map-marker fa-2x"></i>
+              Add my GPS tracks <label> </label>
               <input id="showMap" type="checkbox" onInput={this.handleShowChange} />
-            </label>
             </li>
             <li>
-            <label> Add my agenda
+              <i class="fa-li fa fa-calendar-check-o fa-2x"></i>
+              Add my agenda <label> </label>
               <input id="showAgenda" type="checkbox" onInput={this.handleShowChange} />
-            </label>
             </li>
           </ul>
-
+        </div>
         </div>
         <div className='row' className='traces'>
           <div className='col-md-6'>
