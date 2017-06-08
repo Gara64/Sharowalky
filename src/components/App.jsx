@@ -22,14 +22,16 @@ class App extends React.Component {
     // Get photos
     this.getPhotos()
 
-    var startDate = moment()
+    var startDate = moment('20170606', 'YYYYMMDD')
+    console.log('start date : ' + startDate)
     this.state = {
       startDate: startDate,
       photos: [],
       photosReco: [],
       showSteps: false,
       showMap: false,
-      showAgenda: false
+      showAgenda: false,
+      photosGroup: []
     }
     this.handleDateChange = this.handleDateChange.bind(this)
     this.handleShowChange = this.handleShowChange.bind(this)
@@ -67,6 +69,7 @@ class App extends React.Component {
     let photos = []
     let photosReco = []
     let photosFace = []
+    let photosGroup = []
     let _this = this
     indexFilesByDate().then(function (index) {
       fetchPhotos(index).then(function (docs) {
@@ -79,6 +82,7 @@ class App extends React.Component {
             }
             // Add the photos with recognized faces in separate state
             if (photo.name.indexOf('_reco') > -1) {
+              console.log('photo reco : ', photo.name)
               photosReco.push(photo)
               _this.setState({
                 photosReco: photosReco
@@ -87,6 +91,12 @@ class App extends React.Component {
               photosFace.push(photo)
               _this.setState({
                 photosFace: photosFace
+              })
+            } else if (photo.name.indexOf('_group') > -1) {
+              console.log('photo group !')
+              photosGroup.push(photo)
+              _this.setState({
+                photosGroup: photosGroup
               })
             } else {
               photos.push(photo)
@@ -97,13 +107,17 @@ class App extends React.Component {
           })
         }
 
-        console.log('photos : ', this.state.photos)
+        // console.log('photos : ', _this.state.photos)
       })
     })
   }
 
   render () {
     //    <Photos date={this.state.startDate} photos={this.state.photos}></Photos>
+
+    let date = moment(this.state.startDate)
+    let day = date.date()
+    let month = date.month() + 1
     return (
       <div className='container'>
         <h1>Sharowalky 2000</h1>
@@ -112,7 +126,21 @@ class App extends React.Component {
         <DatePicker selected={this.state.startDate} onChange={this.handleDateChange} />
         <div className="row">
           <div className="col-md-12">
-            <PhotoGallery id="photo-gallery" photos={this.state.photos} photosReco={this.state.photosReco}></PhotoGallery>
+            {day === 6 && month === 6
+            ? <PhotoGallery
+                id="photo-gallery"
+                photos={this.state.photos}
+                photosReco={this.state.photosReco}
+                date={this.state.startDate}
+              />
+
+            : <PhotoGallery
+                id="photo-gallery"
+                photos={this.state.photosGroup}
+                photosReco={this.state.photosReco}
+                date={this.state.startDate}
+              />
+            }
           </div>
         </div>
         <div className="row">
@@ -160,7 +188,15 @@ class App extends React.Component {
           </div>
         </div>
         <div>
-          <Details date={this.state.startDate} photos={this.state.photos} photosFace={this.state.photosFace}></Details>
+          <Details
+            date={this.state.startDate}
+            photosReco={this.state.photosReco}
+            photos={this.state.photos}
+            photosFace={this.state.photosFace}
+            showTracks={this.state.showMap}
+            showSteps={this.state.showSteps}
+            showAgenda={this.state.showAgenda}
+          />
         </div>
       </div>
     )
@@ -193,6 +229,6 @@ const getDownloadLink = async (doc) => {
   let link = await cozy.client.files.getDownloadLinkById(doc._id)
   // TODO: change by cozy url
   link = 'http://cozy.tools:8080' + link
-  console.log('download link: ', link)
+  // console.log('download link: ', link)
   return link
 }
