@@ -2,15 +2,10 @@ import React from 'react'
 import { translate } from '../lib/I18n'
 import '../styles/app'
 
-
 class Calendar extends React.Component {
-  constructor (props) {
-    super(props)
-  }
 
-  render() {
+  render () {
     console.log('date : ' + this.props.date)
-    const title = '<h3> My planning for this day ' + this.props.date + ' </h3>'
     return (
       <div>
         <h3> My planning for this day</h3>
@@ -70,10 +65,8 @@ class Calendar extends React.Component {
           </tbody>
         </table>
       </div>
-
-
-   )
-}
+    )
+  }
 }
 
 export default translate()(Calendar)
