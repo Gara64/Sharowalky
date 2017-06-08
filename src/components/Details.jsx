@@ -33,30 +33,61 @@ class Details extends React.Component {
   handleShowACLChange (event) {
     let div = document.getElementById('details')
     div.innerHTML = ''
-    console.log('state handle : ', this.state.showAllACLs)
     if (!this.state.showAllACLs) {
       this.state.showAllACLs = true
       let ACLs = []
-      for (let i = 0; i < this.props.photos.length; i++) {
-        for (let j = 0; j < this.props.photosFace.length; j++) {
-          let acl = {
-            filename: this.props.photos[i].name,
-            filehref: this.props.photos[i].src,
-            subjectname: this.props.photosFace[j].name,
-            subjecthref: this.props.photosFace[j].src
-          }
-          ACLs.push(acl)
-        }
-      }
-      // Add tracks for each subject
+
+      // Add recognized photos to the acls
       for (let i = 0; i < this.props.photosFace.length; i++) {
-        let acl = {
-          filename: 'tracks_' + this.props.date + '.gpx',
-          filehref: '',
-          subjectname: this.props.photosFace[i].name,
-          subjecthref: this.props.photosFace[i].src
+        for (let j = 0; j < this.props.photosReco.length; j++) {
+
+          // find the corresponding photo without reco
+          let baseName = this.props.photosReco[j].name
+          baseName = baseName.replace('_reco', '')
+
+          for (let k = 0; k < this.props.photos.length; k++) {
+            if (this.props.photos[k].name === baseName) {
+              let aclPhotos = {
+                filename: this.props.photos[k].name,
+                filehref: this.props.photos[k].src,
+                subjectname: this.props.photosFace[i].name,
+                subjecthref: this.props.photosFace[i].src
+              }
+              console.log('acl photo name : ' + aclPhotos.filename)
+              ACLs.push(aclPhotos)
+              break
+            }
+          }
         }
-        ACLs.push(acl)
+
+        if (this.props.showTracks) {
+          let aclTracks = {
+            filename: 'tracks_' + this.props.date + '.gpx',
+            filehref: '',
+            subjectname: this.props.photosFace[i].name,
+            subjecthref: this.props.photosFace[i].src
+          }
+          ACLs.push(aclTracks)
+        }
+        if (this.props.showSteps) {
+          let aclSteps = {
+            filename: 'steps_' + this.props.date + '.csv',
+            filehref: '',
+            subjectname: this.props.photosFace[i].name,
+            subjecthref: this.props.photosFace[i].src
+          }
+          ACLs.push(aclSteps)
+        }
+        if (this.props.showAgenda) {
+          let aclAgenda = {
+            filename: 'planning_' + this.props.date + '.ics',
+            filehref: '',
+            subjectname: this.props.photosFace[i].name,
+            subjecthref: this.props.photosFace[i].src
+          }
+          ACLs.push(aclAgenda)
+        }
+
       }
       ReactDOM.render(<ACL ACLs={ACLs}/>, div)
     } else {
@@ -114,7 +145,6 @@ class Graph extends React.Component {
   }
 
   componentDidMount () {
-    console.log('DID MOUNT')
     var div = document.getElementById('graphid')
 
     var insertSvg = function(svgCode, bindFunctions){
@@ -129,20 +159,11 @@ class Graph extends React.Component {
   }
 
   render () {
-    console.log('render : ', this.props.children.toString())
-    // let graph = 'graph BT;D(What: Photos)-->ACL;S(Who: Contacts)-->ACL;click ACL ACLCallback "Show ACL"'
-    //  <div className='mermaid' dangerouslySetInnerHTML={{__html: graph}}></div>
-
     return (
       <div className='mermaid'>
         {this.props.children.toString()}
       </div>
     )
-    /*
-    return (
-      <div id='graphid' className="mermaid" dangerouslySetInnerHTML={{__html: this.state.diagram}}></div>
-    )
-    */
   }
 }
 
@@ -236,7 +257,7 @@ class TableRowEl extends React.Component {
 
 class ACL extends React.Component {
   render () {
-    console.log('acls : ', JSON.stringify(this.props.ACLs))
+    // console.log('acls : ', JSON.stringify(this.props.ACLs))
     let rows = []
     for (let i = 0; i < this.props.ACLs.length; i++) {
       rows.push(
@@ -283,7 +304,6 @@ window.ACLCallback = function (id) {
 
 
 window.graphCallback = function (id) {
-  console.log('graph callback')
   let div = document.getElementById('details')
   div.innerHTML = '' // reset to avoid buggy HighLight render
 
@@ -315,7 +335,7 @@ window.graphCallback = function (id) {
   } else if (id === 'DI1') {
 
   } else if (id === 'DI2') {
-    div.innerHTML = '<i> FaceRecognition.py</i>'
+    div.innerHTML = '<a href="https://github.com/Gara64/face-recognition">Face recognition source code</a>'
   } else if (id === 'IS') {
     let title = 'Number of subjects in the Personal Cloud:'
     let code = 12

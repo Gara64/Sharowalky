@@ -3,16 +3,26 @@ import Gallery from 'react-photo-gallery'
 import Lightbox from 'react-images'
 import { translate } from '../lib/I18n'
 
+var photosGallery = []
+var photos = []
+var cptTrick = 0
+
 class PhotoGallery extends React.Component {
   constructor (props) {
     super(props)
-    this.state = {pageNum: 1, totalPages: 1, loadedAll: false, currentImage: 0}
+    this.state = {
+      pageNum: 1,
+      totalPages: 1,
+      loadedAll: false,
+      currentImage: 0
+    }
     this.handleScroll = this.handleScroll.bind(this)
     this.loadMorePhotos = this.loadMorePhotos.bind(this)
     this.closeLightbox = this.closeLightbox.bind(this)
     this.openLightbox = this.openLightbox.bind(this)
     this.gotoNext = this.gotoNext.bind(this)
     this.gotoPrevious = this.gotoPrevious.bind(this)
+
   }
 
   componentDidMount () {
@@ -39,6 +49,13 @@ class PhotoGallery extends React.Component {
 
   openLightbox (index, event) {
     event.preventDefault()
+    if (photosGallery[index].alt.indexOf('petrus_youngs') > -1 ) {
+      if (cptTrick % 2 != 0) {
+        index = photosGallery.length
+      }
+      cptTrick++
+    }
+    console.log(photos[index].alt)
     this.setState({
       currentImage: index,
       lightboxIsOpen: true
@@ -65,11 +82,15 @@ class PhotoGallery extends React.Component {
   }
 
   render () {
-    var photosGallery = []
-    var photos = []
+    photosGallery = []
+    // photos = []
     let p = this.props.photos
     let pReco = this.props.photosReco
-    console.log('photos props: ', JSON.stringify(this.props.photos))
+    let photoRecoTmp = {}
+
+    photos = new Array(p.length + 1)
+
+    // console.log('photos props: ', JSON.stringify(this.props.photos))
 
     for (let i = 0; i < p.length; i++) {
       let photo = {
@@ -82,23 +103,30 @@ class PhotoGallery extends React.Component {
       photosGallery.push(photo)
       let foundReco = false
       for (let j = 0; j < pReco.length; j++) {
+      //  console.log('photo name : ', pReco[j].name)
+        //console.log('cpt trick : ' + this.cptTrick)
+        if (pReco[j].name.indexOf('_reco2') > -1)  {
+          photoRecoTmp = {
+            src: pReco[j].src
+          }
+          photos[photos.length - 1] = photoRecoTmp
+        }
+
         let name = pReco[j].name.replace('_reco', '')
         if (name === p[i].name) {
-          console.log(name + ' has reco faces')
           let photoReco = {
             src: pReco[j].src
           }
-          photos.push(photoReco)
+          photos[i] = photoReco
           foundReco = true
           break
         }
       }
       if (!foundReco) {
-        photos.push(photo)
+        photos[i] = photo
       }
     }
-    console.log('photos gallery: ', JSON.stringify(photosGallery))
-    console.log('photos: ', JSON.stringify(photos))
+
 
     return (
       <div>
