@@ -22,7 +22,7 @@ class App extends React.Component {
     // Get photos
     this.getPhotos()
 
-    var startDate = moment('20170606', 'YYYYMMDD')
+    var startDate = moment('20170601', 'YYYYMMDD')
     console.log('start date : ' + startDate)
     this.state = {
       startDate: startDate,
@@ -40,8 +40,12 @@ class App extends React.Component {
   handleDateChange (date) {
     console.log('input : ', date)
     this.setState({
-      startDate: date
+      startDate: date,
+      showSteps: false,
+      showMap: false,
+      showAgenda: false
     })
+
   }
 
   handleShowChange (event) {
@@ -115,9 +119,26 @@ class App extends React.Component {
   render () {
     //    <Photos date={this.state.startDate} photos={this.state.photos}></Photos>
 
+
+
     let date = moment(this.state.startDate)
     let day = date.date()
     let month = date.month() + 1
+
+    let gallery = null
+    if (day === 6 && month === 6) {
+      gallery = <PhotoGallery id="photo-gallery" photos={this.state.photos} photosReco={this.state.photosReco} date={this.state.startDate} />
+    } else if (day === 1 && month === 6) {
+      gallery = null
+    } else {
+      gallery = <PhotoGallery
+          id="photo-gallery"
+          photos={this.state.photosGroup}
+          photosReco={this.state.photosReco}
+          date={this.state.startDate}
+        />
+    }
+
     return (
       <div className='container'>
         <h1>Sharowalky 2000</h1>
@@ -130,21 +151,7 @@ class App extends React.Component {
         </div>
         <div className="row">
           <div className="col-md-12">
-            {day === 6 && month === 6
-            ? <PhotoGallery
-                id="photo-gallery"
-                photos={this.state.photos}
-                photosReco={this.state.photosReco}
-                date={this.state.startDate}
-              />
-
-            : <PhotoGallery
-                id="photo-gallery"
-                photos={this.state.photosGroup}
-                photosReco={this.state.photosReco}
-                date={this.state.startDate}
-              />
-            }
+            {gallery}
           </div>
         </div>
         <div className="row">
@@ -155,17 +162,17 @@ class App extends React.Component {
             <li>
               <i class="fa-li fa fa-bar-chart fa-2x"></i>
               Add my steps <label> </label>
-              <input id="showSteps" type="checkbox" onInput={this.handleShowChange} />
+            <input id="showSteps" type="checkbox" onInput={this.handleShowChange} checked={this.state.showSteps}/>
             </li>
             <li>
               <i class="fa-li fa fa-map-marker fa-2x"></i>
               Add my GPS tracks <label> </label>
-              <input id="showMap" type="checkbox" onInput={this.handleShowChange} />
+            <input id="showMap" type="checkbox" onInput={this.handleShowChange} checked={this.state.showMap}/>
             </li>
             <li>
               <i class="fa-li fa fa-calendar-check-o fa-2x"></i>
               Add my agenda <label> </label>
-              <input id="showAgenda" type="checkbox" onInput={this.handleShowChange} />
+            <input id="showAgenda" type="checkbox" onInput={this.handleShowChange} checked={this.state.showAgenda} />
             </li>
           </ul>
         </div>

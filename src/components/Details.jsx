@@ -189,7 +189,7 @@ class Code extends React.Component {
 class OpTree extends React.Component {
   render () {
     return (
-      <div className='mermaid'>
+      <div className='mermaid' style='width:500px;height:500px'>
         graph BT;
           PC1(Database)-->F1;
           PC2(Database)-->F2;
@@ -350,7 +350,7 @@ window.graphCallback = function (id) {
     ReactDOM.render(<Code code={code} title={title}/>, div)
   } else if (id === 'MS') {
     let title = 'Number of matching subjects:'
-    let code = 3
+    let code = 4
     ReactDOM.render(<Code code={code} title={title}/>, div)
   } else if (id =='ACL') {
     let title = 'Rule semantic'
