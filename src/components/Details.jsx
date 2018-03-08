@@ -4,7 +4,7 @@ import { translate } from '../lib/I18n'
 import '../styles/app'
 import '../styles/highlight'
 import mermaid from 'mermaid'
-//import ReactMermaid from 'react-mermaid'
+// import ReactMermaid from 'react-mermaid'
 import Highlight from 'react-highlight'
 
 class Details extends React.Component {
@@ -22,7 +22,7 @@ class Details extends React.Component {
   }
 
   // Necessary to deal with the mermaid bug after gallery rendering
-  componentDidUpdate() {
+  componentDidUpdate () {
   }
 
   handleShowTreeChange (event) {
@@ -40,7 +40,6 @@ class Details extends React.Component {
       // Add recognized photos to the acls
       for (let i = 0; i < this.props.photosFace.length; i++) {
         for (let j = 0; j < this.props.photosReco.length; j++) {
-
           // find the corresponding photo without reco
           let baseName = this.props.photosReco[j].name
           baseName = baseName.replace('_reco', '')
@@ -87,7 +86,6 @@ class Details extends React.Component {
           }
           ACLs.push(aclAgenda)
         }
-
       }
       ReactDOM.render(<ACL ACLs={ACLs}/>, div)
     } else {
@@ -142,6 +140,7 @@ class Details extends React.Component {
   }
 }
 
+/*
 class Graph extends React.Component {
   getDefaultProps () {
     return {
@@ -171,6 +170,7 @@ class Graph extends React.Component {
     )
   }
 }
+*/
 
 class Code extends React.Component {
   render () {
@@ -246,7 +246,7 @@ class TableRowEl extends React.Component {
             height="50"
             width="50"
           />
-        <label> </label>  {subjectName}
+        <label> </label> {subjectName}
         </td>
         <td>
           <button
@@ -311,7 +311,6 @@ window.ACLCallback = function (id) {
   ReactDOM.render(<ACL ACLs={ACLs}/>, div)
 }
 
-
 window.graphCallback = function (id) {
   let div = document.getElementById('details')
   div.innerHTML = '' // reset to avoid buggy HighLight render
@@ -352,12 +351,11 @@ window.graphCallback = function (id) {
     let title = 'Number of matching subjects:'
     let code = 3
     ReactDOM.render(<Code code={code} title={title}/>, div)
-  } else if (id =='ACL') {
+  } else if (id === 'ACL') {
     let title = 'Rule semantic'
     let code = 'ACL <- {(s,d,a) ∈ SxDxA / Filter1 (d,Q) ∧ MatchS(DI(d), SI(s)) }'
     code += '\n\nQ: docType = ".jpg" && date = ?\n'
     code += 'DI: face recognition function from .jpg files\n'
     ReactDOM.render(<Code code={code} title={title}/>, div)
-
   }
 }
