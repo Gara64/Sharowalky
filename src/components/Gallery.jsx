@@ -2,6 +2,9 @@ import React from 'react'
 import Gallery from 'react-photo-gallery'
 import Lightbox from 'react-images'
 import { translate } from '../lib/I18n'
+import Highlight from 'react-highlight'
+import '../styles/highlight'
+
 
 var photosGallery = []
 var photos = []
@@ -15,7 +18,8 @@ class PhotoGallery extends React.Component {
       totalPages: 1,
       loadedAll: false,
       currentImage: 0,
-      showSpinner: false
+      showSpinner: false,
+      showRule: false
     }
     this.handleScroll = this.handleScroll.bind(this)
     this.loadMorePhotos = this.loadMorePhotos.bind(this)
@@ -24,6 +28,7 @@ class PhotoGallery extends React.Component {
     this.gotoNext = this.gotoNext.bind(this)
     this.gotoPrevious = this.gotoPrevious.bind(this)
     this.handleShareClick = this.handleShareClick.bind(this)
+    this.handleShowRule = this.handleShowRule.bind(this)
     this.stopSpinner = this.stopSpinner.bind(this)
   }
 
@@ -38,6 +43,13 @@ class PhotoGallery extends React.Component {
       showSpinner: true
     })
     setTimeout(this.stopSpinner, 3000)
+  }
+
+  handleShowRule () {
+    let show = !this.state.showRule
+    this.setState({
+      showRule: show
+    })
   }
 
   componentDidMount () {
@@ -64,7 +76,7 @@ class PhotoGallery extends React.Component {
 
   openLightbox (index, event) {
     event.preventDefault()
-    if (photosGallery[index].alt.indexOf('petrus_youngs') > -1) {
+    if (photosGallery[index].alt.indexOf('petrus_3') > -1) {
       if (cptTrick % 2 !== 0) {
         index = photosGallery.length
       }
@@ -155,8 +167,18 @@ class PhotoGallery extends React.Component {
           isOpen={this.state.lightboxIsOpen}
           width={1600}
         />
-      <a class="btn btn-lg btn-success" href="#" onClick={this.handleShareClick}>
-         <i class="fa fa-share-alt fa-2x pull-left"></i> Share my group photos</a>
+    <a class="btn btn-lg btn-success" href="#" onClick={this.handleShareClick}>
+         <i class="fa fa-share-alt fa-2x pull-left"></i>
+
+          Share my group photos with<br /> recognized contacts</a>
+        <div>
+          <a class="btn btn-info" href="#" onClick={this.handleShowRule}>
+            <i class="fa fa-eye fa-lg"></i> Show rule semantics</a>
+            {this.state.showRule
+            ? <Rule />
+            : null
+            }
+        </div>
         {this.state.showSpinner
         ? <Spinner />
         : null
@@ -174,6 +196,25 @@ class Spinner extends React.Component {
       <div id='spinner'>
         <i class="fa fa-spinner fa-spin fa-3x fa-fw"></i>
         <span class="sr-only">Loading data...</span>
+      </div>
+    )
+  }
+}
+
+class Rule extends React.Component {
+
+  render () {
+    let title = 'Rule semantic'
+    let code = 'ACL <- {(s,d,a) ∈ SxDxA / Filter1 (d,Q) ∧ MatchS(DI(d), SI(s)) }'
+    code += '\n\nQ: docType = ".jpg" && date = ?\n'
+    code += 'DI: face recognition function from .jpg files\n'
+    return (
+      <div>
+        <p>{title}</p>
+        <Highlight className='json'>
+          {code}
+        </Highlight>
+        <a href="https://github.com/Gara64/face-recognition">Face recognition source code</a>
       </div>
     )
   }
