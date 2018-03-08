@@ -1,45 +1,19 @@
-[![Travis build status shield](https://img.shields.io/travis/cozy/<SLUG_GH>/master.svg)](https://travis-ci.org/cozy/<SLUG_GH>)
-[![NPM release version shield](https://img.shields.io/npm/v/<SLUG_NPM>.svg)](https://www.npmjs.com/package/<SLUG_NPM>)
-[![Github Release version shield](https://img.shields.io/github/tag/cozy/<SLUG_GH>.svg)](https://github.com/cozy/<SLUG_GH>/releases)
-[![NPM Licence shield](https://img.shields.io/npm/l/<SLUG_NPM>.svg)](https://github.com/cozy/<SLUG_GH>/blob/master/LICENSE)
+# Sharowalky
 
 
-[Cozy] <APP_NAME>
-=======================
+Share your pictures, steps and agenda with your friends, easily and securely.
 
-
-What's Cozy?
-------------
-
-![Cozy Logo](https://cdn.rawgit.com/cozy/cozy-guidelines/master/templates/cozy_logo_small.svg)
-
-[Cozy] is a platform that brings all your web services in the same private space.  With it, your webapps and your devices can share data easily, providing you with a new experience. You can install Cozy on your own hardware where no one's tracking you.
-
-
-What's Cozy <APP_NAME>?
------------------------
-
-<APP_SHORT_DESCRIPTION>
-
-
-Hack
-----
-
-_:pushpin: Note:_ we recommend to use [Yarn] instead of NPM for package management. Don't hesitate to [install][yarn-install] and use it for your Cozy projects, it's now our main node packages tool for Cozy official apps.
 
 ### Install and run in dev mode
 
-Hacking the Cozy <APP_NAME> app requires you to [setup a dev environment][setup].
 
-You can then clone the app repository and install dependencies:
+You can clone the app repository and install dependencies:
 
 ```sh
-$ git clone https://github.com/cozy/<SLUG_GH>.git
-$ cd <SLUG_GH>
+$ git clone https://github.com/cozy/Sharowalky.git
+$ cd Sharowalky
 $ yarn install
 ```
-
-:pushpin: If you use a node environment wrapper like [nvm] or [ndenv], don't forget to set your local node version before doing a `yarn install`.
 
 Cozy's apps use a standard set of _npm scripts_ to run common tasks, like watch, lint, test, build…
 
@@ -50,41 +24,30 @@ You can easily view your current running app, you can use the [cozy-stack docker
 
 ```sh
 # in a terminal, run your app in watch mode
-$ cd <SLUG_GH>
-$ yarn watch:browser
+yarn watch:browser
 ```
 
 ```sh
 # in another terminal, run the docker container
-$ docker run --rm -it -p 8080:8080 -v "$(pwd)/build":/data/cozy-app/<SLUG_GH> cozy/cozy-app-dev
-or
-$ yarn stack:docker
+# the db and storage folders are used to persist data in the app
+# the --rm flag triggers the destruction of the docker container at the end of the execution, as it created each time this command is run.
+docker run -it --rm \
+    -p 8080:8080 \
+    -p 8025:8025 \
+    -v "$(pwd)/build":/data/cozy-app \
+    -v "$(pwd)/db":/usr/local/couchdb/data \
+    -v "$(pwd)/storage":/data/cozy-storage \
+    cozy/cozy-app-dev
+
 ```
+Your app is available at http://sharowalky.cozy.tools:8080.
 
-your app is available at http://<SLUG_GH>.cozy.tools:8080.
 
-
-### Living on the edge
-
-[Cozy-ui] is our frontend stack library that provides common styles and components accross the whole Cozy's apps. You can use it for you own application to follow the official Cozy's guidelines and styles. If you need to develop / hack cozy-ui, it's sometimes more useful to develop on it through another app. You can do it by cloning cozy-ui locally and link it to yarn local index:
-
+If you need to go inside the docker container:
 ```sh
-git clone https://github.com/cozy/cozy-ui.git
-cd cozy-ui
-yarn install
-yarn link
+docker ps
+docker exec -ti <container-id> /bin/bash
 ```
-
-then go back to your app project and replace the distributed cozy-ui module with the linked one:
-
-```sh
-cd cozy-drive
-yarn link cozy-ui
-```
-
-You can now run the watch task and your project will hot-reload each times a cozy-ui source file is touched.
-
-[Cozy-client-js] is our API library that provides an unified API on top of the cozy-stack. If you need to develop / hack cozy-client-js in parallel of your application, you can use the same trick that we used with [cozy-ui]: yarn linking.
 
 
 ### Tests
@@ -92,7 +55,6 @@ You can now run the watch task and your project will hot-reload each times a coz
 Tests are run by [mocha] under the hood, and written using [chai] and [sinon]. You can easily run the tests suite with:
 
 ```sh
-$ cd <SLUG_GH>
 $ yarn test
 ```
 
@@ -113,7 +75,7 @@ Whenever your app needs to use a given `doctype`, you should:
 
 ### Open a Pull-Request
 
-If you want to work on Cozy <APP_NAME> and submit code modifications, feel free to open pull-requests! See the [contributing guide][contribute] for more information about how to properly open pull-requests.
+If you want to work on Cozy Sharowalky and submit code modifications, feel free to open pull-requests! See the [contributing guide][contribute] for more information about how to properly open pull-requests.
 
 
 Community
@@ -130,7 +92,7 @@ As a _developer_, you must [configure the transifex client][tx-client], and clai
 
 ### Maintainer
 
-The lead maintainer for Cozy <APP_NAME> is [<APP_MAINTAINER>](https://github.com/<APP_MAINTAINER>), send him/her a :beers: to say hello!
+The lead maintainer for Cozy Sharowalky is [Gara64](https://github.com/Gara64), send him/her a :beers: to say hello!
 
 
 ### Get in touch
