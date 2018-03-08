@@ -5,7 +5,6 @@ import { translate } from '../lib/I18n'
 import Highlight from 'react-highlight'
 import '../styles/highlight'
 
-
 var photosGallery = []
 var photos = []
 var cptTrick = 0

@@ -45,7 +45,6 @@ class App extends React.Component {
       showMap: false,
       showAgenda: false
     })
-
   }
 
   handleShowChange (event) {
@@ -118,9 +117,6 @@ class App extends React.Component {
 
   render () {
     //    <Photos date={this.state.startDate} photos={this.state.photos}></Photos>
-
-
-
     let date = moment(this.state.startDate)
     let day = date.date()
     let month = date.month() + 1
