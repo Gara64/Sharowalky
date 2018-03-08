@@ -1,4 +1,4 @@
-# Sharowalky
+# Sharowalky
 
 
 Share your pictures, steps and agenda with your friends, easily and securely.
@@ -14,9 +14,6 @@ $ git clone https://github.com/cozy/Sharowalky.git
 $ cd Sharowalky
 $ yarn install
 ```
-
-Cozy's apps use a standard set of _npm scripts_ to run common tasks, like watch, lint, test, build…
-
 
 ### Run it inside the VM
 
