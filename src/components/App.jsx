@@ -235,8 +235,16 @@ const fetchPhotos = async (index) => {
 
 const getDownloadLink = async (doc) => {
   let link = await cozy.client.files.getDownloadLinkById(doc._id)
-  // TODO: change by cozy url
-  link = 'http://cozy.tools:8080' + link
-  // console.log('download link: ', link)
+  const root = document.querySelector('[role=application]')
+  const data = root.dataset
+  const scheme = getScheme()
+
+  link = scheme + data.cozyDomain + link
   return link
+}
+
+const getScheme = function () {
+  const url = window.location.href
+  const arr = url.split('/')
+  return arr[0] + '//'
 }
