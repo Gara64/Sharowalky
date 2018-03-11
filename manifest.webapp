@@ -29,7 +29,7 @@
     "files": {
         "description": "Required to show the photos",
         "type": "io.cozy.files",
-        "verbs": ["GET"]
+        "verbs": ["GET", "POST"]
     }
   }
 }
