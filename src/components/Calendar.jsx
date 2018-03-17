@@ -23,10 +23,10 @@ class Calendar extends React.Component {
                 09:00 - 10:30
               </td>
               <td class="col-md-3">
-                Keynote
+                Annoucements / Awards
               </td>
               <td class="col-md-3">
-                Room 1
+                EI 7
               </td>
             </tr>
             <tr>
@@ -34,32 +34,32 @@ class Calendar extends React.Component {
                 11:00 - 12:30
               </td>
               <td class="col-md-3">
-                Security & Privacy
+                Stream Processing
               </td>
               <td class="col-md-3">
-                Room 3
+                EI 9
               </td>
             </tr>
             <tr>
               <td class="field-label col-md-3">
-                14:00 - 15:30
+                13:30 - 15:00
               </td>
               <td class="col-md-3">
-                Persasive computing
+                Research challenges
               </td>
               <td class="col-md-3">
-                Room 2
+                EI 7
               </td>
             </tr>
             <tr>
               <td class="field-label">
-                16:00 - 17:30
+                15:30 - 17:00
               </td>
               <td class="col-md-3">
-                Ubiquitous Mobile
+                Big and Streaming Data
               </td>
               <td class="col-md-3">
-                Room 2
+                EI 7
               </td>
             </tr>
           </tbody>

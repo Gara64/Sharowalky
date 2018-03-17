@@ -22,7 +22,7 @@ class App extends React.Component {
     // Get photos
     this.getPhotos()
 
-    var startDate = moment('20170601', 'YYYYMMDD')
+    var startDate = moment('20180328', 'YYYYMMDD')
     console.log('start date : ' + startDate)
     this.state = {
       startDate: startDate,
