@@ -28,6 +28,7 @@ class App extends React.Component {
       startDate: startDate,
       photos: [],
       photosReco: [],
+      acls: [],
       showSteps: false,
       showMap: false,
       showAgenda: false,
@@ -112,6 +113,30 @@ class App extends React.Component {
 
         // console.log('photos : ', _this.state.photos)
       })
+      fetchACLs(index).then(function (docs) {
+        for (let doc of docs) {
+          console.log('doc : ', doc)
+
+          getDownloadLink(doc).then(function (link) {
+            let acl = {
+              src: link,
+              id: doc._id
+            }
+            console.log('acl file : ', acl)
+            fetch(acl.src).then((resp) => resp.json())
+            .then(function (data) {
+              acl = {
+                doc: data.doc,
+                subjects: data.subjects
+              }
+              _this.setState({
+                acls: acl
+              })
+              console.log('acl : ' + JSON.stringify(acl))
+            })
+          })
+        }
+      })
     })
   }
 
@@ -122,7 +147,7 @@ class App extends React.Component {
     let month = date.month() + 1
 
     let gallery = null
-    if (day === 6 && month === 6) {
+    if (day === 28 && month === 3) {
       gallery = <PhotoGallery id="photo-gallery" photos={this.state.photos} photosReco={this.state.photosReco} date={this.state.startDate} />
     } else if (day === 1 && month === 6) {
       gallery = null
@@ -228,7 +253,22 @@ const fetchPhotos = async (index) => {
     descending: true,
     wholeResponse: true
   }
-  console.log('index fetch : ', JSON.stringify(index))
+  console.log('index photo fetch : ', JSON.stringify(index))
+
+  return await cozy.client.data.query(index, options)
+}
+
+const fetchACLs = async (index) => {
+  const options = {
+    selector: {
+      mime: 'application/json',
+      trashed: false
+    },
+    fields: ['_id'],
+    descending: true,
+    wholeResponse: true
+  }
+  console.log('index acl fetch : ', JSON.stringify(index))
 
   return await cozy.client.data.query(index, options)
 }
