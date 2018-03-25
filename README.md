@@ -28,6 +28,7 @@ yarn watch:browser
 # in another terminal, run the docker container
 # the db and storage folders are used to persist data in the app
 # the --rm flag triggers the destruction of the docker container at the end of the execution, as it created each time this command is run.
+# Add -p 5984:5984 to expose couchDB
 docker run -it --rm \
     -p 8080:8080 \
     -p 8025:8025 \
