@@ -22,7 +22,7 @@ class App extends React.Component {
     // Get photos
     this.getPhotos()
 
-    var startDate = moment('20180328', 'YYYYMMDD')
+    var startDate = moment('20180301', 'YYYYMMDD')
     console.log('start date : ' + startDate)
     this.state = {
       startDate: startDate,
@@ -32,7 +32,11 @@ class App extends React.Component {
       showSteps: false,
       showMap: false,
       showAgenda: false,
-      photosGroup: []
+      photosGroup: [],
+      photosPark: [],
+      photosRecoPark: [],
+      photosDemo: [],
+      photosRecoDemo: []
     }
     this.handleDateChange = this.handleDateChange.bind(this)
     this.handleShowChange = this.handleShowChange.bind(this)
@@ -74,6 +78,11 @@ class App extends React.Component {
     let photosReco = []
     let photosFace = []
     let photosGroup = []
+    let photosRecoDemo = []
+    let photosRecoPark = []
+    let photosDemo = []
+    let photosPark = []
+    let acls = []
     let _this = this
     indexFilesByDate().then(function (index) {
       fetchPhotos(index).then(function (docs) {
@@ -82,14 +91,19 @@ class App extends React.Component {
             let photo = {
               src: link,
               id: doc._id,
-              name: doc.name
+              name: doc.name,
+              metadata: doc.metadata
             }
             // Add the photos with recognized faces in separate state
             if (photo.name.indexOf('_reco') > -1) {
               console.log('photo reco : ', photo.name)
               photosReco.push(photo)
+              _this.photoMatchDate(photo, 21, 5) ? photosRecoPark.push(photo) : photosRecoDemo.push(photo)
+              photosRecoPark.push(photo)
               _this.setState({
-                photosReco: photosReco
+                photosReco: photosReco,
+                photosRecoPark: photosRecoPark,
+                photosRecoDemo: photosRecoDemo
               })
             } else if (photo.name.indexOf('_face') > -1) {
               photosFace.push(photo)
@@ -104,14 +118,15 @@ class App extends React.Component {
               })
             } else {
               photos.push(photo)
+              _this.photoMatchDate(photo, 21, 5) ? photosPark.push(photo) : photosDemo.push(photo)
               _this.setState({
-                photos: photos
+                photos: photos,
+                photosPark: photosPark,
+                photosDemo: photosDemo
               })
             }
           })
         }
-
-        // console.log('photos : ', _this.state.photos)
       })
       fetchACLs(index).then(function (docs) {
         for (let doc of docs) {
@@ -129,8 +144,9 @@ class App extends React.Component {
                 doc: data.doc,
                 subjects: data.subjects
               }
+              acls.push(acl)
               _this.setState({
-                acls: acl
+                acls: acls
               })
               console.log('acl : ' + JSON.stringify(acl))
             })
@@ -140,22 +156,47 @@ class App extends React.Component {
     })
   }
 
+  photoMatchDate (photo, day, month) {
+    let photoDate = moment(photo.metadata.datetime)
+    return photoDate.date() === day && photoDate.month() + 1 === month
+  }
+
+  extractPhotosByDate (photos, day, month) {
+    let photosMatch = []
+    for (let i = 0; i < photos.length; i++) {
+      let metadata = photos[i].metadata
+      let photoDate = moment(metadata.datetime)
+
+      if (photoDate.date() === day && photoDate.month() + 1 === month) {
+        photosMatch.push(photos[i])
+      }
+    }
+    return photosMatch
+  }
+
   render () {
     //    <Photos date={this.state.startDate} photos={this.state.photos}></Photos>
+
     let date = moment(this.state.startDate)
     let day = date.date()
     let month = date.month() + 1
 
+    console.log('photos demo : ' + JSON.stringify(this.state.photosDemo))
+    console.log('photos park : ' + JSON.stringify(this.state.photosPark))
+
     let gallery = null
     if (day === 28 && month === 3) {
-      gallery = <PhotoGallery id="photo-gallery" photos={this.state.photos} photosReco={this.state.photosReco} date={this.state.startDate} />
-    } else if (day === 1 && month === 6) {
-      gallery = null
+      gallery = <PhotoGallery
+        id="photo-gallery"
+        photos={this.state.photosDemo}
+        photosReco={this.state.photosRecoDemo}
+        date={this.state.startDate}
+      />
     } else {
       gallery = <PhotoGallery
           id="photo-gallery"
-          photos={this.state.photosGroup}
-          photosReco={this.state.photosReco}
+          photos={this.state.photosPark}
+          photosReco={this.state.photosRecoPark}
           date={this.state.startDate}
         />
     }
@@ -229,6 +270,7 @@ class App extends React.Component {
             showTracks={this.state.showMap}
             showSteps={this.state.showSteps}
             showAgenda={this.state.showAgenda}
+            acls={this.state.acls}
           />
         </div>
       </div>

@@ -30,33 +30,51 @@ class Details extends React.Component {
     div.setAttribute('style', 'visibility: visible;')
   }
 
+  getPhotoLinkFromName (photos, name) {
+    name = name.replace(/\.[^/.]+$/, '')
+    name = name.replace('_reco', '')
+
+    console.log('name to find : ' + name)
+
+    for (let i = 0; i < photos.length; i++) {
+      let photoName = photos[i].name.replace('_face', '')
+      photoName = photoName.replace(/\.[^/.]+$/, '') // remove the extension
+
+      console.log('photo name : ' + photoName)
+
+      if (photoName === name) {
+        return photos[i].src
+      }
+    }
+    return ''
+  }
+
   handleShowACLChange (event) {
     let div = document.getElementById('details')
     div.innerHTML = ''
     if (!this.state.showAllACLs) {
       this.state.showAllACLs = true
+
       let ACLs = []
 
-      // Add recognized photos to the acls
-      for (let i = 0; i < this.props.photosFace.length; i++) {
-        for (let j = 0; j < this.props.photosReco.length; j++) {
-          // find the corresponding photo without reco
-          let baseName = this.props.photosReco[j].name
-          baseName = baseName.replace('_reco', '')
+      for (let i = 0; i < this.props.acls.length; i++) {
+        let doc = this.props.acls[i].doc
+        let dochref = this.getPhotoLinkFromName(this.props.photos, doc)
 
-          for (let k = 0; k < this.props.photos.length; k++) {
-            if (this.props.photos[k].name === baseName) {
-              let aclPhotos = {
-                filename: this.props.photos[k].name,
-                filehref: this.props.photos[k].src,
-                subjectname: this.props.photosFace[i].name,
-                subjecthref: this.props.photosFace[i].src
-              }
-              console.log('acl photo name : ' + aclPhotos.filename)
-              ACLs.push(aclPhotos)
-              break
-            }
+        let subjects = this.props.acls[i].subjects
+        for (let j = 0; j < subjects.length; j++) {
+          let subhref = this.getPhotoLinkFromName(this.props.photosFace, subjects[j])
+          if (subhref === '') {
+            continue
           }
+          let aclPhotos = {
+            filename: doc,
+            filehref: dochref,
+            subjectname: subjects[i],
+            subjecthref: subhref
+          }
+          console.log('acl photo : ' + JSON.stringify(aclPhotos))
+          ACLs.push(aclPhotos)
         }
 
         if (this.props.showTracks) {
@@ -87,6 +105,58 @@ class Details extends React.Component {
           ACLs.push(aclAgenda)
         }
       }
+
+      //
+      // // Add recognized photos to the acls
+      // for (let i = 0; i < this.props.photosFace.length; i++) {
+      //   for (let j = 0; j < this.props.photosReco.length; j++) {
+      //     // find the corresponding photo without reco
+      //     let baseName = this.props.photosReco[j].name
+      //     baseName = baseName.replace('_reco', '')
+      //
+      //     for (let k = 0; k < this.props.photos.length; k++) {
+      //       if (this.props.photos[k].name === baseName) {
+      //         let aclPhotos = {
+      //           filename: this.props.photos[k].name,
+      //           filehref: this.props.photos[k].src,
+      //           subjectname: this.props.photosFace[i].name,
+      //           subjecthref: this.props.photosFace[i].src
+      //         }
+      //         console.log('acl photo name : ' + aclPhotos.filename)
+      //         ACLs.push(aclPhotos)
+      //         break
+      //       }
+      //     }
+      //   }
+      //
+      //   if (this.props.showTracks) {
+      //     let aclTracks = {
+      //       filename: 'tracks_' + this.props.date + '.gpx',
+      //       filehref: '',
+      //       subjectname: this.props.photosFace[i].name,
+      //       subjecthref: this.props.photosFace[i].src
+      //     }
+      //     ACLs.push(aclTracks)
+      //   }
+      //   if (this.props.showSteps) {
+      //     let aclSteps = {
+      //       filename: 'steps_' + this.props.date + '.csv',
+      //       filehref: '',
+      //       subjectname: this.props.photosFace[i].name,
+      //       subjecthref: this.props.photosFace[i].src
+      //     }
+      //     ACLs.push(aclSteps)
+      //   }
+      //   if (this.props.showAgenda) {
+      //     let aclAgenda = {
+      //       filename: 'planning_' + this.props.date + '.ics',
+      //       filehref: '',
+      //       subjectname: this.props.photosFace[i].name,
+      //       subjecthref: this.props.photosFace[i].src
+      //     }
+      //     ACLs.push(aclAgenda)
+      //   }
+      // }
       ReactDOM.render(<ACL ACLs={ACLs}/>, div)
     } else {
       this.state.showAllACLs = false
